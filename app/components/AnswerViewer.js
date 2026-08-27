@@ -185,11 +185,24 @@ export default function AnswerViewer({
             const box = region.box;
             if (!box) return null;
 
-            // Normalized coordinates (0 to 1000 scale converted to percentages)
-            const topPct = (box.ymin / 1000) * 100;
-            const leftPct = (box.xmin / 1000) * 100;
-            const widthPct = ((box.xmax - box.xmin) / 1000) * 100;
-            const heightPct = ((box.ymax - box.ymin) / 1000) * 100;
+            // Ensure the box has enough vertical height to cover both the label AND all answer lines below it
+            const currentHeight = box.ymax - box.ymin;
+            const minContentHeight = 80; // minimum height ensuring header + body lines are enclosed
+            const effectiveHeight = Math.max(currentHeight, minContentHeight);
+
+            const padYTop = 8;
+            const padYBottom = 16;
+            const ymin = Math.max(0, box.ymin - padYTop);
+            const ymax = Math.min(1000, box.ymin + effectiveHeight + padYBottom);
+
+            // Ensure xmin starts cleanly to the left of the label and extends across the written section
+            const xmin = Math.max(20, Math.min(box.xmin - 20, 50));
+            const xmax = Math.min(970, Math.max(box.xmax + 20, 940));
+
+            const topPct = (ymin / 1000) * 100;
+            const leftPct = (xmin / 1000) * 100;
+            const widthPct = ((xmax - xmin) / 1000) * 100;
+            const heightPct = ((ymax - ymin) / 1000) * 100;
 
             const questionLabel = activeQuestion?.number ? `Q${activeQuestion.number}.` : 'Answer';
 

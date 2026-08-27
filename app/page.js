@@ -80,12 +80,20 @@ export default function Home() {
       setQuestions(data.questions || []);
       setAnswers(data.answers || []);
       setOverallSummary(data.overallSummary || null);
-      // Empty pages will trigger the realistic handwriting canvas in AnswerViewer
-      setAnswerPages([]);
+      
+      // Load the authentic sample answer sheet image
+      setAnswerPages([
+        {
+          pageNumber: 1,
+          dataUrl: '/samples/student_answersheet.jpg',
+          width: 800,
+          height: 1100,
+        },
+      ]);
       
       setTimeout(() => {
         setCurrentView('workspace');
-      }, 1200);
+      }, 1000);
     } catch (err) {
       console.error(err);
       setCurrentView('upload');

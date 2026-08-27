@@ -1,7 +1,8 @@
 /**
  * Document Processing Utility
- * Converts uploaded PDF documents and image files into high-resolution
+ * Converts uploaded PDF documents and image files into optimized
  * page images (base64 data URLs) with width/height metadata.
+ * Optimizes image dimensions to stay comfortably within Groq Vision TPM limits.
  */
 
 let pdfjsLib = null;
@@ -18,7 +19,37 @@ async function getPdfJs() {
 }
 
 /**
- * Reads an image file and returns it as a base64 Data URL with dimensions
+ * Resizes and compresses an image canvas to keep token counts small while preserving text clarity
+ */
+function compressAndResizeImage(img, maxDimension = 1024) {
+  const canvas = document.createElement('canvas');
+  let width = img.naturalWidth || img.width || 1000;
+  let height = img.naturalHeight || img.height || 1400;
+
+  if (width > maxDimension || height > maxDimension) {
+    if (width > height) {
+      height = Math.round((height * maxDimension) / width);
+      width = maxDimension;
+    } else {
+      width = Math.round((width * maxDimension) / height);
+      height = maxDimension;
+    }
+  }
+
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0, width, height);
+
+  return {
+    dataUrl: canvas.toDataURL('image/jpeg', 0.80),
+    width,
+    height,
+  };
+}
+
+/**
+ * Reads an image file and returns it as an optimized base64 Data URL with dimensions
  * @param {File} file 
  * @returns {Promise<{ pageNumber: number, dataUrl: string, width: number, height: number }>}
  */
@@ -26,18 +57,19 @@ export async function processImageFile(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const dataUrl = e.target.result;
+      const originalDataUrl = e.target.result;
       const img = new Image();
       img.onload = () => {
+        const optimized = compressAndResizeImage(img, 1024);
         resolve({
           pageNumber: 1,
-          dataUrl,
-          width: img.naturalWidth || 1200,
-          height: img.naturalHeight || 1600,
+          dataUrl: optimized.dataUrl,
+          width: optimized.width,
+          height: optimized.height,
         });
       };
       img.onerror = reject;
-      img.src = dataUrl;
+      img.src = originalDataUrl;
     };
     reader.onerror = reject;
     reader.readAsDataURL(file);
@@ -45,7 +77,7 @@ export async function processImageFile(file) {
 }
 
 /**
- * Converts a multi-page PDF into an array of high-resolution canvas page images
+ * Converts a multi-page PDF into an array of optimized canvas page images
  * @param {File | ArrayBuffer} fileOrBuffer 
  * @param {function(number, number): void} [onProgress] - Callback (currentPage, totalPages)
  * @returns {Promise<Array<{ pageNumber: number, dataUrl: string, width: number, height: number }>>}
@@ -70,8 +102,8 @@ export async function processPdfFile(fileOrBuffer, onProgress) {
     if (onProgress) onProgress(pageNum, numPages);
     const page = await pdf.getPage(pageNum);
 
-    // Render at scale 2.0 for sharp OCR and crisp display
-    const scale = 2.0;
+    // Render at scale 1.25 for crisp text while staying under TPM token limits
+    const scale = 1.25;
     const viewport = page.getViewport({ scale });
 
     const canvas = document.createElement('canvas');
@@ -85,7 +117,7 @@ export async function processPdfFile(fileOrBuffer, onProgress) {
     };
 
     await page.render(renderContext).promise;
-    const dataUrl = canvas.toDataURL('image/jpeg', 0.92);
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.80);
 
     pages.push({
       pageNumber: pageNum,

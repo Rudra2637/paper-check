@@ -246,16 +246,34 @@ export default function UploadView({ onStartMapping, onUseDemo }) {
           Once both files are uploaded, you&apos;ll able to map answers with questions
         </p>
 
-        {/* 1-Click Demo Evaluation Button */}
-        <div className="mt-4 pt-4 border-t border-slate-200/60 flex items-center gap-2">
-          <span className="text-xs text-slate-500 font-medium">Want to see it in action?</span>
+        {/* 1-Click Demo & Sample Files */}
+        <div className="mt-4 pt-4 border-t border-slate-200/60 flex flex-col sm:flex-row items-center gap-3">
           <button
             onClick={onUseDemo}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-50 hover:bg-orange-100 text-[#ff5722] text-xs font-semibold rounded-xl border border-[#ff5722]/30 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-4 py-2 bg-orange-50 hover:bg-orange-100 text-[#ff5722] text-xs font-semibold rounded-xl border border-[#ff5722]/30 transition-all cursor-pointer shadow-2xs"
           >
-            <Sparkles size={13} />
-            <span>Try Sample Demo Exam</span>
+            <Sparkles size={14} />
+            <span>⚡ 1-Click Demo Evaluation</span>
           </button>
+
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <span>Or download test files:</span>
+            <a
+              href="/samples/question_paper.jpg"
+              download="Class10_Biology_Question_Paper.jpg"
+              className="text-slate-700 font-semibold underline hover:text-black"
+            >
+              Question Paper
+            </a>
+            <span>•</span>
+            <a
+              href="/samples/student_answersheet.jpg"
+              download="Sarah_Student_AnswerSheet.jpg"
+              className="text-slate-700 font-semibold underline hover:text-black"
+            >
+              Answer Sheet
+            </a>
+          </div>
         </div>
       </div>
     </div>

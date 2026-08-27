@@ -59,7 +59,7 @@ CRITICAL RULES:
 `;
 
   const response = await groq.chat.completions.create({
-    model: 'llama-3.2-11b-vision-preview',
+    model: process.env.GROQ_VISION_MODEL || 'qwen/qwen3.8-27b',
     messages: [
       {
         role: 'user',
@@ -70,7 +70,7 @@ CRITICAL RULES:
       },
     ],
     temperature: 0.1,
-    max_tokens: 4000,
+    max_tokens: 1500,
   });
 
   const textOutput = response.choices[0]?.message?.content || '';
@@ -107,10 +107,13 @@ YOUR TASKS:
 1. Locate every handwritten answer on the pages, even if written out of order or across multiple pages.
 2. For each question in the list, determine:
    - Is it ANSWERED, PARTIALLY_ANSWERED, or UNANSWERED?
-   - The exact spatial bounding box coordinates [ymin, xmin, ymax, xmax] (normalized from 0 to 1000 scale) of the answer on that specific pageNumber (1-indexed).
+   - The exact spatial bounding box coordinates [ymin, xmin, ymax, xmax] (normalized from 0 to 1000 scale) of the answer on that specific pageNumber (1-indexed):
+     * ymin: Start slightly above the question label (e.g. "Ans 6:").
+     * ymax: Extend all the way to the bottom of the LAST sentence, equation, or diagram of the answer (crucial: do not just enclose the label line, encompass all lines of the response).
+     * xmin & xmax: Span across the width of the page margin (typically xmin ~ 50, xmax ~ 950).
    - If an answer spans multiple pages (e.g. Page 1 and Page 2), include a bounding box region for EACH page.
    - Transcribe the student's handwritten response.
-   - Grade the response: score awarded (0 to maxMarks) and constructive feedback explaining what was correct or missing.
+   - Grade the response: score awarded (0 to maxMarks) and constructive feedback (1-2 concise sentences).
 3. If there is handwritten text that does NOT belong to any question, create an entry with questionId: "unmatched".
 
 Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this schema:
@@ -154,7 +157,7 @@ Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching thi
 `;
 
   const response = await groq.chat.completions.create({
-    model: 'llama-3.2-11b-vision-preview',
+    model: process.env.GROQ_VISION_MODEL || 'qwen/qwen3.8-27b',
     messages: [
       {
         role: 'user',
@@ -165,7 +168,7 @@ Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching thi
       },
     ],
     temperature: 0.1,
-    max_tokens: 6000,
+    max_tokens: 4000,
   });
 
   const textOutput = response.choices[0]?.message?.content || '';
@@ -173,19 +176,67 @@ Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching thi
 }
 
 /**
- * Robust JSON parser for LLM responses
+ * Ultra-robust JSON parser with auto-repair for truncated or partial LLM outputs
  */
 function parseJsonFromLlmOutput(text) {
-  try {
-    // Try matching ```json ... ``` code block
-    const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
-    if (jsonMatch && jsonMatch[1]) {
-      return JSON.parse(jsonMatch[1]);
-    }
-    // Fallback: try parsing directly
-    return JSON.parse(text.trim());
-  } catch (err) {
-    console.error('Failed to parse JSON from LLM output:', text);
-    throw new Error('Could not parse structured output from AI model. Please retry.');
+  if (!text || typeof text !== 'string') {
+    throw new Error('Empty response received from AI model.');
   }
+
+  // 1. Strip reasoning <think>...</think> blocks
+  let cleaned = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+
+  // 2. Extract code block if present
+  const codeBlockMatch = cleaned.match(/```(?:json)?\s*([\s\S]*?)\s*```/);
+  if (codeBlockMatch && codeBlockMatch[1]) {
+    cleaned = codeBlockMatch[1].trim();
+  }
+
+  // 3. Try direct parse
+  try {
+    return JSON.parse(cleaned);
+  } catch {
+    // Continue to repair strategies
+  }
+
+  // 4. Try parsing within outer braces/brackets
+  try {
+    const firstBrace = cleaned.indexOf('{');
+    const firstBracket = cleaned.indexOf('[');
+    const startIdx = firstBrace !== -1 && (firstBracket === -1 || firstBrace < firstBracket) ? firstBrace : firstBracket;
+
+    if (startIdx !== -1) {
+      const isObject = cleaned[startIdx] === '{';
+      const lastClose = isObject ? cleaned.lastIndexOf('}') : cleaned.lastIndexOf(']');
+      if (lastClose > startIdx) {
+        return JSON.parse(cleaned.substring(startIdx, lastClose + 1));
+      }
+    }
+  } catch {
+    // Continue to next fallback
+  }
+
+  // 5. Truncation Auto-Repair: Extract the completed "answers" array if tail was truncated
+  try {
+    const answersMatch = cleaned.match(/"answers"\s*:\s*(\[\s*\{[\s\S]*?\}\s*\])/);
+    if (answersMatch && answersMatch[1]) {
+      const parsedAnswers = JSON.parse(answersMatch[1]);
+      return {
+        answers: parsedAnswers,
+        overallSummary: {
+          totalMarksAwarded: parsedAnswers.reduce((sum, a) => sum + (a.evaluation?.scoreAwarded || 0), 0),
+          totalMaxMarks: parsedAnswers.reduce((sum, a) => sum + (a.evaluation?.maxMarks || 0), 0),
+          answeredCount: parsedAnswers.filter(a => a.status === 'ANSWERED').length,
+          unansweredCount: parsedAnswers.filter(a => a.status === 'UNANSWERED').length,
+          strengths: ['Accurate responses to attempted questions'],
+          areasForImprovement: ['Review unattempted questions'],
+        }
+      };
+    }
+  } catch {
+    // Fall through to error
+  }
+
+  console.error('Failed to parse JSON from LLM output:', text);
+  throw new Error('Could not parse structured output from AI model. Please retry.');
 }

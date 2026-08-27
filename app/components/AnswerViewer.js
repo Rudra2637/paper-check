@@ -52,19 +52,19 @@ export default function AnswerViewer({
 
   return (
     <div className="flex flex-col h-full bg-slate-100 relative select-none">
-      {/* Top Controls Bar matching Figma */}
-      <div className="h-14 px-5 bg-white border-b border-slate-200/80 flex items-center justify-between z-10">
-        <h4 className="font-bold text-sm text-slate-800 tracking-tight">
+      {/* Top Controls Bar matching Figma (Desktop: Clean white bar, Mobile: Sleek dark pill bar) */}
+      <div className="md:h-14 px-3 sm:px-5 py-2 md:py-0 bg-transparent md:bg-white md:border-b md:border-slate-200/80 flex items-center justify-between z-10">
+        <h4 className="hidden md:block font-bold text-sm text-slate-800 tracking-tight">
           Answersheet
         </h4>
 
-        {/* Center/Right: Zoom & Page Controls */}
-        <div className="flex items-center gap-3">
+        {/* Controls Bar (Sleek dark container on mobile, light pills on desktop) */}
+        <div className="w-full md:w-auto bg-slate-900 md:bg-transparent text-white md:text-slate-700 rounded-2xl md:rounded-none p-1.5 md:p-0 flex items-center justify-between md:justify-end gap-2 sm:gap-3 shadow-md md:shadow-none">
           {/* Zoom controls */}
-          <div className="flex items-center bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-slate-700 gap-2 border border-slate-200/60 shadow-2xs">
+          <div className="flex items-center bg-slate-800 md:bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-white md:text-slate-700 gap-2 md:border md:border-slate-200/60 shadow-2xs">
             <button
               onClick={handleZoomOut}
-              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 transition-colors"
+              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 transition-colors"
               title="Zoom out"
             >
               <ZoomOut size={14} />
@@ -72,7 +72,7 @@ export default function AnswerViewer({
             <span className="w-10 text-center">{zoomLevel}%</span>
             <button
               onClick={handleZoomIn}
-              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 transition-colors"
+              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 transition-colors"
               title="Zoom in"
             >
               <ZoomIn size={14} />
@@ -80,11 +80,11 @@ export default function AnswerViewer({
           </div>
 
           {/* Page navigation */}
-          <div className="flex items-center bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-slate-700 gap-1.5 border border-slate-200/60 shadow-2xs">
+          <div className="flex items-center bg-slate-800 md:bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-white md:text-slate-700 gap-1.5 md:border md:border-slate-200/60 shadow-2xs">
             <button
               onClick={handlePrevPage}
               disabled={currentPageIndex === 0}
-              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
+              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
               title="Previous page"
             >
               <ChevronLeft size={14} />
@@ -95,7 +95,7 @@ export default function AnswerViewer({
             <button
               onClick={handleNextPage}
               disabled={currentPageIndex === totalPages - 1}
-              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 disabled:opacity-40 disabled:hover:bg-transparent transition-colors"
+              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
               title="Next page"
             >
               <ChevronRight size={14} />
@@ -116,7 +116,9 @@ export default function AnswerViewer({
             transformOrigin: 'top center',
             transition: 'transform 0.15s ease-out',
           }}
-          className="relative bg-white shadow-xl rounded-xl border border-slate-300/80 overflow-hidden w-full max-w-2xl min-h-[850px]"
+          className={`relative bg-white shadow-xl rounded-xl border border-slate-300/80 overflow-hidden w-full max-w-2xl ${
+            currentPageData?.dataUrl ? 'h-auto' : 'min-h-[850px]'
+          }`}
         >
           {/* If real page image exists */}
           {currentPageData?.dataUrl ? (
@@ -124,7 +126,7 @@ export default function AnswerViewer({
             <img
               src={currentPageData.dataUrl}
               alt={`Answer Sheet Page ${currentPageNumber}`}
-              className="w-full h-auto object-contain pointer-events-none"
+              className="w-full h-auto block pointer-events-none"
             />
           ) : (
             <div className="p-8 font-serif leading-relaxed text-slate-800 text-sm min-h-[850px] relative bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]">

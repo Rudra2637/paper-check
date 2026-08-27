@@ -80,23 +80,24 @@ export default function UploadView({ onStartMapping, onUseDemo }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 max-w-5xl mx-auto w-full min-h-[calc(100vh-4rem)]">
+    <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 sm:p-6 md:p-12 max-w-5xl mx-auto w-full min-h-[calc(100vh-4rem)]">
       {/* Hero Header */}
-      <div className="text-center mb-8">
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-2">
-          Upload <span className="text-[#ff5722]">Question Paper & Answer Sheets</span>
+      <div className="text-center mb-6 sm:mb-8">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-2 leading-tight">
+          Upload <span className="text-[#ff5722]">Question Paper</span>
+          <br className="sm:hidden" /> <span className="text-[#ff5722]">& Answer Sheets</span>
         </h2>
-        <p className="text-slate-500 text-sm md:text-base">
+        <p className="text-slate-500 text-xs sm:text-sm md:text-base">
           Upload both files to get started
         </p>
       </div>
 
       {/* Center Teacher Avatar Graphic */}
-      <div className="relative mb-10 flex items-center justify-center">
+      <div className="relative mb-6 sm:mb-10 flex items-center justify-center">
         {/* Soft decorative concentric rings */}
-        <div className="w-28 h-28 rounded-full bg-orange-100/60 absolute animate-ping opacity-30" />
-        <div className="w-24 h-24 rounded-full bg-gradient-to-br from-orange-200/50 to-orange-100/30 flex items-center justify-center p-2 shadow-inner">
-          <div className="w-18 h-18 rounded-full overflow-hidden bg-white shadow-md flex items-center justify-center relative">
+        <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-orange-100/60 absolute animate-ping opacity-30" />
+        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-orange-200/50 to-orange-100/30 flex items-center justify-center p-2 shadow-inner">
+          <div className="w-16 h-16 sm:w-18 sm:h-18 rounded-full overflow-hidden bg-white shadow-md flex items-center justify-center relative">
             <Image
               src="/Teacher.png"
               alt="Teacher Illustration"
@@ -115,7 +116,7 @@ export default function UploadView({ onStartMapping, onUseDemo }) {
       </div>
 
       {/* Dual Upload Dropzone Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-3xl mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 w-full max-w-3xl mb-6 sm:mb-8">
         {/* Card 1: Question Paper */}
         <input
           type="file"
@@ -126,14 +127,14 @@ export default function UploadView({ onStartMapping, onUseDemo }) {
         />
         <div
           onClick={() => !questionFile && questionInputRef.current?.click()}
-          className={`relative border-2 border-dashed rounded-3xl p-8 flex flex-col items-center justify-center text-center transition-all min-h-[170px] ${
+          className={`relative border-2 border-dashed rounded-2xl sm:rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center text-center transition-all min-h-[150px] sm:min-h-[170px] ${
             questionFile
               ? 'border-slate-300 bg-white shadow-xs'
               : 'border-slate-300/90 bg-white/70 hover:bg-white hover:border-[#ff5722]/60 cursor-pointer shadow-2xs hover:shadow-md'
           }`}
         >
           {questionFile ? (
-            <div className="flex items-center justify-between w-full p-2 bg-slate-50 border border-slate-200 rounded-2xl">
+            <div className="flex items-center justify-between w-full p-2 bg-slate-50 border border-slate-200 rounded-xl sm:rounded-2xl">
               <div className="flex items-center gap-3 overflow-hidden">
                 <div className="w-10 h-10 rounded-xl bg-red-50 text-red-600 flex items-center justify-center flex-shrink-0 font-bold text-xs border border-red-200">
                   <FileText size={20} />

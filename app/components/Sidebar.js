@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { 
   LayoutGrid, 
   Users, 
@@ -25,7 +26,7 @@ export default function Sidebar({ isCollapsed, onToggleCollapse, activeScreen = 
 
   return (
     <aside
-      className={`bg-white border-r border-slate-200/80 h-screen sticky top-0 flex flex-col justify-between transition-all duration-300 z-30 ${
+      className={`hidden md:flex bg-white border-r border-slate-200/80 h-screen sticky top-0 flex-col justify-between transition-all duration-300 z-30 ${
         isCollapsed ? 'w-20 p-3' : 'w-64 p-5'
       }`}
     >
@@ -33,14 +34,27 @@ export default function Sidebar({ isCollapsed, onToggleCollapse, activeScreen = 
       <div className="flex flex-col gap-6">
         {/* Brand Logo & Collapse Toggle */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 bg-black rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-sm">
-              V
-            </div>
-            {!isCollapsed && (
-              <span className="font-bold text-xl tracking-tight text-slate-900">
-                Veda<span className="text-slate-800">AI</span>
-              </span>
+          <div className="flex items-center">
+            {!isCollapsed ? (
+              <Image
+                src="/logo.png"
+                alt="VedaAI"
+                width={125}
+                height={32}
+                className="h-8 w-auto object-contain"
+                priority
+              />
+            ) : (
+              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-start">
+                <Image
+                  src="/logo.png"
+                  alt="VedaAI"
+                  width={125}
+                  height={32}
+                  className="h-8 w-auto max-w-none object-left"
+                  priority
+                />
+              </div>
             )}
           </div>
           <button
@@ -52,20 +66,21 @@ export default function Sidebar({ isCollapsed, onToggleCollapse, activeScreen = 
           </button>
         </div>
 
-        {/* AI Teacher's Toolkit Pill */}
+        {/* AI Teacher's Toolkit Pill Button matching User Reference Image */}
         {!isCollapsed ? (
-          <div className="bg-white border-2 border-[#ff5722]/30 rounded-2xl p-2.5 flex items-center gap-2 shadow-sm hover:border-[#ff5722] transition-colors cursor-pointer group">
-            <div className="w-6 h-6 rounded-full bg-[#ff5722]/10 flex items-center justify-center text-[#ff5722]">
-              <Sparkles size={14} className="group-hover:rotate-12 transition-transform" />
-            </div>
-            <span className="text-xs font-semibold text-slate-800">
+          <button className="w-full bg-[#1e232a] border-2 border-[#ff5722] rounded-full py-2 px-4 flex items-center justify-center gap-2 shadow-md hover:bg-black hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group">
+            <Sparkles size={14} className="text-white group-hover:rotate-12 transition-transform fill-white/20" />
+            <span className="text-xs font-semibold text-white tracking-tight">
               AI Teacher&apos;s Toolkit
             </span>
-          </div>
+          </button>
         ) : (
-          <div className="w-10 h-10 mx-auto rounded-2xl border-2 border-[#ff5722]/40 flex items-center justify-center text-[#ff5722] cursor-pointer hover:bg-[#ff5722]/10 transition-colors">
-            <Sparkles size={18} />
-          </div>
+          <button
+            className="w-10 h-10 mx-auto rounded-full bg-[#1e232a] border-2 border-[#ff5722] flex items-center justify-center text-white shadow-md hover:bg-black transition-all"
+            title="AI Teacher's Toolkit"
+          >
+            <Sparkles size={16} />
+          </button>
         )}
 
         {/* Navigation Items */}

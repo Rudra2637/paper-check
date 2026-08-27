@@ -33,23 +33,26 @@ export default function MappingWorkspace({
   return (
     <div className="flex-1 flex flex-col h-[calc(100vh-4rem)] overflow-hidden bg-slate-100">
 
-      <div className="md:hidden flex p-2 bg-white border-b border-slate-200">
-        <div className="flex w-full bg-slate-100 p-1 rounded-xl">
+      {/* Mobile Segmented Tab Toggle matching Figma Mobile Screen */}
+      <div className="md:hidden flex px-3 py-2 bg-white border-b border-slate-200/80">
+        <div className="flex w-full bg-slate-100 p-1 rounded-full border border-slate-200/60 shadow-2xs">
           <button
             onClick={() => setMobileTab('questions')}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${mobileTab === 'questions'
-                ? 'bg-white text-slate-900 shadow-xs'
+            className={`flex-1 py-2 text-xs font-bold rounded-full transition-all ${
+              mobileTab === 'questions'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'text-slate-500 hover:text-slate-900'
-              }`}
+            }`}
           >
-            Questions ({questions.length})
+            Questions
           </button>
           <button
             onClick={() => setMobileTab('answers')}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${mobileTab === 'answers'
-                ? 'bg-white text-slate-900 shadow-xs'
+            className={`flex-1 py-2 text-xs font-bold rounded-full transition-all ${
+              mobileTab === 'answers'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'text-slate-500 hover:text-slate-900'
-              }`}
+            }`}
           >
             Answer Sheet
           </button>

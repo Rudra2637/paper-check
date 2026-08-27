@@ -71,11 +71,19 @@ export default function QuestionCard({
             <p className="text-xs md:text-sm font-medium text-slate-800 leading-snug">
               {question.text}
             </p>
-            {question.topic && (
-              <span className="inline-block mt-1 text-[11px] font-medium text-slate-400">
-                {question.topic}
-              </span>
-            )}
+            <div className="flex flex-wrap items-center gap-2 mt-1.5">
+              {question.topic && (
+                <span className="text-[11px] font-medium text-slate-400">
+                  {question.topic}
+                </span>
+              )}
+              {isAnswered && answer.regions?.[0]?.pageNumber && (
+                <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600 border border-slate-200">
+                  📄 Page {answer.regions[0].pageNumber}
+                  {answer.regions.length > 1 ? ` (+${answer.regions.length - 1} more)` : ''}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 

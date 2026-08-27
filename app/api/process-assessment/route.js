@@ -37,6 +37,16 @@ export async function POST(request) {
     // Step 1: Extract Questions from Question Paper pages
     const questions = await extractQuestionsFromPages(questionPages);
 
+    if (!Array.isArray(questions) || questions.length === 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: 'No valid exam questions detected in the Question Paper. Please ensure you uploaded a proper question paper (and verify that files were not accidentally swapped with the Answer Sheet).',
+        },
+        { status: 400 }
+      );
+    }
+
     // Step 2: Map Student Handwritten Answers & Grade against Questions
     const mappingResult = await mapAnswersAndGrade(answerPages, questions);
 

@@ -73,6 +73,45 @@ export default function QuestionListPanel({
             />
           );
         })}
+
+        {/* Unmatched / Extra Writing Section */}
+        {answers.filter((a) => a.status === 'UNMATCHED' || a.questionId?.startsWith('unmatched')).map((unmatched, uIdx) => {
+          const isActive = activeQuestionId === (unmatched.questionId || `unmatched_${uIdx}`);
+          const pageNum = unmatched.regions?.[0]?.pageNumber || 1;
+          const transcript = unmatched.regions?.[0]?.transcription || unmatched.evaluation?.feedback || 'Unassigned handwritten writing or rough work.';
+
+          return (
+            <div
+              key={`unmatched-${uIdx}`}
+              onClick={() => onSelectQuestion(unmatched.questionId || `unmatched_${uIdx}`)}
+              className={`rounded-2xl transition-all cursor-pointer border p-4 mt-4 ${
+                isActive
+                  ? 'border-amber-500 bg-amber-50/70 shadow-md ring-2 ring-amber-500/20'
+                  : 'border-dashed border-amber-300/80 bg-amber-50/30 hover:bg-amber-50/60'
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2 mb-1.5">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300">
+                    ⚠️ Extra / Unmatched Writing
+                  </span>
+                  <span className="text-[10px] font-semibold text-slate-500">
+                    📄 Page {pageNum}
+                  </span>
+                </div>
+                <span className="text-[11px] text-amber-700 font-semibold">
+                  Not in Exam
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 font-mono italic bg-white/80 p-2 rounded-xl border border-amber-200/60">
+                &quot;{transcript}&quot;
+              </p>
+              <p className="text-[10px] text-slate-400 mt-1">
+                Click to view and highlight this writing on the answer sheet.
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

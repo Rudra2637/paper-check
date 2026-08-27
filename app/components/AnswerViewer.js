@@ -204,7 +204,12 @@ export default function AnswerViewer({
             const widthPct = ((xmax - xmin) / 1000) * 100;
             const heightPct = ((ymax - ymin) / 1000) * 100;
 
-            const questionLabel = activeQuestion?.number ? `Q${activeQuestion.number}.` : 'Answer';
+            const isUnmatched = activeAnswer?.status === 'UNMATCHED' || activeAnswer?.questionId?.startsWith('unmatched');
+            const questionLabel = isUnmatched
+              ? '📝 Unmatched Writing'
+              : activeQuestion?.number
+              ? `Q${activeQuestion.number}.`
+              : 'Answer';
 
             return (
               <div
@@ -215,10 +220,18 @@ export default function AnswerViewer({
                   width: `${widthPct}%`,
                   height: `${heightPct}%`,
                 }}
-                className="absolute border-2 border-[#22c55e] bg-[#22c55e]/15 rounded-2xl transition-all duration-300 highlight-box-active pointer-events-none"
+                className={`absolute border-2 rounded-2xl transition-all duration-300 pointer-events-none ${
+                  isUnmatched
+                    ? 'border-amber-500 bg-amber-500/15 shadow-lg shadow-amber-500/20'
+                    : 'border-[#22c55e] bg-[#22c55e]/15 highlight-box-active'
+                }`}
               >
-                {/* Question Pill Badge on Top-Left matching Figma */}
-                <div className="absolute -top-3.5 -left-1 bg-[#16a34a] text-white font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1">
+                {/* Badge on Top-Left */}
+                <div
+                  className={`absolute -top-3.5 -left-1 font-bold text-[11px] px-2.5 py-0.5 rounded-full shadow-md flex items-center gap-1 text-white ${
+                    isUnmatched ? 'bg-amber-600' : 'bg-[#16a34a]'
+                  }`}
+                >
                   <span>{questionLabel}</span>
                 </div>
               </div>

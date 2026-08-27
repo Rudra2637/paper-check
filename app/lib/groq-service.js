@@ -38,7 +38,8 @@ CRITICAL RULES:
    - number: "11 (a)", maxMarks: 2
    - number: "11 (b)", maxMarks: 3
 3. If max marks are stated (e.g. [5], (5 Marks), 5M), parse the numeric value into maxMarks. Default to 1 if not stated.
-4. Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this structure:
+4. VALIDATION RULE: If the image is NOT a question paper (e.g. if it is a handwritten answer sheet, a photo, receipt, or unrelated document), do NOT fabricate questions. Output an empty JSON array: []
+5. Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this structure:
 
 [
   {

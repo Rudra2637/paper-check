@@ -1,14 +1,14 @@
 import Groq from 'groq-sdk';
 
 /**
- * Initializes Groq Client with either user-provided key or environment variable
+ * Initializes Groq Client strictly using server-side environment variable
  */
-export function getGroqClient(apiKey) {
-  const key = apiKey || process.env.NEXT_PUBLIC_GROQ_API_KEY || process.env.GROQ_API_KEY;
+export function getGroqClient() {
+  const key = process.env.GROQ_API_KEY;
   if (!key) {
-    throw new Error('Groq API Key is required. Please provide it in settings or .env.local file.');
+    throw new Error('GROQ_API_KEY environment variable is missing. Please set it in .env.local.');
   }
-  return new Groq({ apiKey: key, dangerouslyAllowBrowser: true });
+  return new Groq({ apiKey: key });
 }
 
 /**
@@ -16,11 +16,10 @@ export function getGroqClient(apiKey) {
  * Treats labelled sub-parts (e.g., 11(a), 11(b)) as distinct question entries.
  * 
  * @param {Array<{pageNumber: number, dataUrl: string}>} questionPages 
- * @param {string} [apiKey]
  * @returns {Promise<Array<{ id: string, number: string, text: string, maxMarks: number, topic?: string }>>}
  */
-export async function extractQuestionsFromPages(questionPages, apiKey) {
-  const groq = getGroqClient(apiKey);
+export async function extractQuestionsFromPages(questionPages) {
+  const groq = getGroqClient();
 
   const imageContent = questionPages.map((p) => ({
     type: 'image_url',
@@ -83,11 +82,10 @@ CRITICAL RULES:
  * 
  * @param {Array<{pageNumber: number, dataUrl: string}>} answerPages 
  * @param {Array<Object>} questions 
- * @param {string} [apiKey]
  * @returns {Promise<Array<Object>>}
  */
-export async function mapAnswersAndGrade(answerPages, questions, apiKey) {
-  const groq = getGroqClient(apiKey);
+export async function mapAnswersAndGrade(answerPages, questions) {
+  const groq = getGroqClient();
 
   const imageContent = answerPages.map((p, index) => ({
     type: 'image_url',

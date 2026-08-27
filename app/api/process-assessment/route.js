@@ -7,7 +7,7 @@ export const maxDuration = 60; // Allow sufficient time for vision processing
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { questionPages, answerPages, apiKey, useDemoData } = body;
+    const { questionPages, answerPages, useDemoData } = body;
 
     // If demo mode is requested or no files provided
     if (useDemoData) {
@@ -35,10 +35,10 @@ export async function POST(request) {
     }
 
     // Step 1: Extract Questions from Question Paper pages
-    const questions = await extractQuestionsFromPages(questionPages, apiKey);
+    const questions = await extractQuestionsFromPages(questionPages);
 
     // Step 2: Map Student Handwritten Answers & Grade against Questions
-    const mappingResult = await mapAnswersAndGrade(answerPages, questions, apiKey);
+    const mappingResult = await mapAnswersAndGrade(answerPages, questions);
 
     return NextResponse.json({
       success: true,

@@ -3,7 +3,7 @@ import { extractQuestionsFromPages, mapAnswersAndGrade } from '@/app/lib/groq-se
 import { SAMPLE_QUESTIONS, SAMPLE_MAPPED_ANSWERS, SAMPLE_OVERALL_SUMMARY } from '@/app/lib/mock-data';
 
 export const dynamic = 'force-dynamic';
-export const maxDuration = 60; // Allow sufficient time for vision processing on Vercel
+export const maxDuration = 120; // 2 minutes execution limit on Vercel
 
 export async function POST(request) {
   try {

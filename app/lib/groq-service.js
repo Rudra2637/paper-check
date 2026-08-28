@@ -39,7 +39,7 @@ CRITICAL RULES:
    - number: "11 (b)", maxMarks: 3
 3. If max marks are stated (e.g. [5], (5 Marks), 5M), parse the numeric value into maxMarks. Default to 1 if not stated.
 4. VALIDATION RULE: If the image is NOT a question paper (e.g. if it is a handwritten answer sheet, a photo, receipt, or unrelated document), do NOT fabricate questions. Output an empty JSON array: []
-5. Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this structure:
+5. Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this structure. Output JSON directly without lengthy pre-thinking or conversational filler:
 
 [
   {
@@ -117,7 +117,7 @@ YOUR TASKS:
    - Grade the response: score awarded (0 to maxMarks) and constructive feedback (1-2 concise sentences).
 3. If there is handwritten text that does NOT belong to any question, create an entry with questionId: "unmatched".
 
-Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this schema:
+Output STRICT JSON format inside a code block \`\`\`json ... \`\`\` matching this schema. Be direct and concise, and output the JSON immediately:
 
 {
   "answers": [

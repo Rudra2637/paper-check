@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import { extractQuestionsFromPages, mapAnswersAndGrade } from '@/app/lib/groq-service';
 import { SAMPLE_QUESTIONS, SAMPLE_MAPPED_ANSWERS, SAMPLE_OVERALL_SUMMARY } from '@/app/lib/mock-data';
 
-export const maxDuration = 60; // Allow sufficient time for vision processing
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60; // Allow sufficient time for vision processing on Vercel
 
 export async function POST(request) {
   try {

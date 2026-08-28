@@ -44,7 +44,16 @@ export default function Home() {
         }),
       });
 
-      const data = await response.json();
+      const rawText = await response.text();
+      let data;
+      try {
+        data = JSON.parse(rawText);
+      } catch {
+        if (response.status === 504 || rawText.includes('TIMEOUT') || rawText.includes('timed out')) {
+          throw new Error('Processing timed out on serverless function. Please retry or use 1-Click Demo.');
+        }
+        throw new Error(rawText || 'Server returned an invalid response format.');
+      }
 
       if (!data.success) {
         throw new Error(data.error || 'Failed to process assessment');

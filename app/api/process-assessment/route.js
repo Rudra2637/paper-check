@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { extractQuestionsFromPages, mapAnswersAndGrade } from '@/app/lib/groq-service';
+import { extractQuestionsFromPages, mapAnswersAndGrade } from '@/app/lib/gemini-service';
 import { SAMPLE_QUESTIONS, SAMPLE_MAPPED_ANSWERS, SAMPLE_OVERALL_SUMMARY } from '@/app/lib/mock-data';
 
 export const dynamic = 'force-dynamic';

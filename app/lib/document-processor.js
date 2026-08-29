@@ -2,7 +2,7 @@
  * Document Processing Utility
  * Converts uploaded PDF documents and image files into optimized
  * page images (base64 data URLs) with width/height metadata.
- * Optimizes image dimensions to stay comfortably within Groq Vision TPM limits.
+ * Optimizes image dimensions for crisp vision OCR and fast processing.
  */
 
 let pdfjsLib = null;

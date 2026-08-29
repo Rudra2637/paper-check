@@ -10,18 +10,20 @@ export default function LoadingView({ progressText = 'Extracting...', stage = 'A
         <div className="flex flex-col items-center text-center max-w-sm">
           {/* Animated Sparkle Icon */}
           <div className="relative mb-6 flex items-center justify-center">
-            <div className="w-24 h-24 rounded-full bg-orange-100/40 absolute animate-ping opacity-30" />
+            <div className="w-24 h-24 rounded-full bg-orange-100/50 absolute animate-ping opacity-40" />
+            <div className="w-20 h-20 rounded-full bg-gradient-to-tr from-orange-200/40 via-orange-100/30 to-amber-100/50 absolute animate-pulse opacity-60" />
             <div className="relative w-24 h-24 flex items-center justify-center animate-sparkle">
               <Image
-                src="/extract.png"
+                src="/Container.png"
                 alt="Extracting..."
-                width={88}
-                height={88}
+                width={92}
+                height={92}
                 style={{ width: 'auto', height: 'auto' }}
-                className="object-contain drop-shadow-sm"
+                className="object-contain drop-shadow-md"
                 priority
                 onError={(e) => {
-                  e.currentTarget.style.display = 'none';
+                  // Fallback to extract.png if Container.png missing
+                  e.currentTarget.src = '/extract.png';
                 }}
               />
             </div>

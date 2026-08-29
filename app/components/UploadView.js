@@ -83,9 +83,11 @@ export default function UploadView({ onStartMapping, onUseDemo }) {
     <div className="flex-1 flex flex-col items-center justify-center px-4 py-8 sm:p-6 md:p-12 max-w-5xl mx-auto w-full min-h-[calc(100vh-4rem)]">
       {/* Hero Header */}
       <div className="text-center mb-6 sm:mb-8">
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-2 leading-tight">
-          Upload <span className="text-[#ff5722]">Question Paper</span>
-          <br className="sm:hidden" /> <span className="text-[#ff5722]">& Answer Sheets</span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-slate-900 mb-2 leading-tight flex flex-wrap items-center justify-center gap-2">
+          <span>Upload</span>
+          <span className="bg-[#ffece5] text-[#ff5722] px-2.5 py-0.5 rounded-lg inline-block">
+            Question Paper & Answer Sheets
+          </span>
         </h2>
         <p className="text-slate-500 text-xs sm:text-sm md:text-base">
           Upload both files to get started

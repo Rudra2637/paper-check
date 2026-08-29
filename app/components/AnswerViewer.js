@@ -51,20 +51,20 @@ export default function AnswerViewer({
   ) || [];
 
   return (
-    <div className="flex flex-col h-full bg-slate-100 relative select-none">
-      {/* Top Controls Bar matching Figma (Desktop: Clean white bar, Mobile: Sleek dark pill bar) */}
-      <div className="md:h-14 px-3 sm:px-5 py-2 md:py-0 bg-transparent md:bg-white md:border-b md:border-slate-200/80 flex items-center justify-between z-10">
-        <h4 className="hidden md:block font-bold text-sm text-slate-800 tracking-tight">
+    <div className="flex flex-col h-full bg-[#f0f2f5] md:bg-slate-100 relative select-none">
+      {/* Desktop Top Controls Bar */}
+      <div className="hidden md:flex h-14 px-5 bg-white border-b border-slate-200/80 items-center justify-between z-10">
+        <h4 className="font-bold text-sm text-slate-800 tracking-tight">
           Answersheet
         </h4>
 
-        {/* Controls Bar (Sleek dark container on mobile, light pills on desktop) */}
-        <div className="w-full md:w-auto bg-slate-900 md:bg-transparent text-white md:text-slate-700 rounded-2xl md:rounded-none p-1.5 md:p-0 flex items-center justify-between md:justify-end gap-2 sm:gap-3 shadow-md md:shadow-none">
+        {/* Desktop Controls */}
+        <div className="flex items-center gap-3">
           {/* Zoom controls */}
-          <div className="flex items-center bg-slate-800 md:bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-white md:text-slate-700 gap-2 md:border md:border-slate-200/60 shadow-2xs">
+          <div className="flex items-center bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-slate-700 gap-2 border border-slate-200/60 shadow-2xs">
             <button
               onClick={handleZoomOut}
-              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 transition-colors"
+              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 transition-colors"
               title="Zoom out"
             >
               <ZoomOut size={14} />
@@ -72,7 +72,7 @@ export default function AnswerViewer({
             <span className="w-10 text-center">{zoomLevel}%</span>
             <button
               onClick={handleZoomIn}
-              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 transition-colors"
+              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 transition-colors"
               title="Zoom in"
             >
               <ZoomIn size={14} />
@@ -80,11 +80,11 @@ export default function AnswerViewer({
           </div>
 
           {/* Page navigation */}
-          <div className="flex items-center bg-slate-800 md:bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-white md:text-slate-700 gap-1.5 md:border md:border-slate-200/60 shadow-2xs">
+          <div className="flex items-center bg-slate-100/90 rounded-xl px-2 py-1 text-xs font-semibold text-slate-700 gap-1.5 border border-slate-200/60 shadow-2xs">
             <button
               onClick={handlePrevPage}
               disabled={currentPageIndex === 0}
-              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
               title="Previous page"
             >
               <ChevronLeft size={14} />
@@ -95,7 +95,7 @@ export default function AnswerViewer({
             <button
               onClick={handleNextPage}
               disabled={currentPageIndex === totalPages - 1}
-              className="p-1 hover:bg-slate-700 md:hover:bg-white rounded-lg text-slate-300 md:text-slate-500 hover:text-white md:hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              className="p-1 hover:bg-white rounded-lg text-slate-500 hover:text-slate-900 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
               title="Next page"
             >
               <ChevronRight size={14} />
@@ -107,7 +107,7 @@ export default function AnswerViewer({
       {/* Main Document Viewer Canvas */}
       <div
         ref={containerRef}
-        className="flex-1 overflow-auto p-4 md:p-8 flex justify-center items-start"
+        className="flex-1 overflow-auto p-3 sm:p-4 md:p-8 flex justify-center items-start"
       >
         <div
           ref={pageRef}
@@ -116,10 +116,52 @@ export default function AnswerViewer({
             transformOrigin: 'top center',
             transition: 'transform 0.15s ease-out',
           }}
-          className={`relative bg-white shadow-xl rounded-xl border border-slate-300/80 overflow-hidden w-full max-w-2xl ${
-            currentPageData?.dataUrl ? 'h-auto' : 'min-h-[850px]'
-          }`}
+          className="relative bg-white shadow-xl rounded-2xl border border-slate-300/80 overflow-hidden w-full max-w-2xl"
         >
+          {/* Mobile Dark Header matching Figma Mobile Screen */}
+          <div className="md:hidden bg-[#1e232a] text-white px-3 py-2.5 flex items-center justify-between border-b border-slate-800">
+            {/* Zoom controls */}
+            <div className="flex items-center bg-[#2b313b] rounded-lg px-2 py-1 text-xs font-semibold text-white gap-2">
+              <button
+                onClick={handleZoomOut}
+                className="p-0.5 hover:bg-slate-700 rounded text-slate-300 hover:text-white"
+                title="Zoom out"
+              >
+                <ZoomOut size={13} />
+              </button>
+              <span className="w-9 text-center text-[11px]">{zoomLevel}%</span>
+              <button
+                onClick={handleZoomIn}
+                className="p-0.5 hover:bg-slate-700 rounded text-slate-300 hover:text-white"
+                title="Zoom in"
+              >
+                <ZoomIn size={13} />
+              </button>
+            </div>
+
+            {/* Page navigation */}
+            <div className="flex items-center bg-[#2b313b] rounded-lg px-2 py-1 text-xs font-semibold text-white gap-1.5">
+              <button
+                onClick={handlePrevPage}
+                disabled={currentPageIndex === 0}
+                className="p-0.5 hover:bg-slate-700 rounded text-slate-300 hover:text-white disabled:opacity-30"
+                title="Previous page"
+              >
+                <ChevronLeft size={13} />
+              </button>
+              <span className="text-[11px]">
+                Page {currentPageNumber} of {totalPages}
+              </span>
+              <button
+                onClick={handleNextPage}
+                disabled={currentPageIndex === totalPages - 1}
+                className="p-0.5 hover:bg-slate-700 rounded text-slate-300 hover:text-white disabled:opacity-30"
+                title="Next page"
+              >
+                <ChevronRight size={13} />
+              </button>
+            </div>
+          </div>
           {/* If real page image exists */}
           {currentPageData?.dataUrl ? (
             /* eslint-disable-next-line @next/next/no-img-element */

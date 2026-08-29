@@ -123,7 +123,7 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen bg-[#f8f9fb]">
-      {/* Figma Sidebar */}
+      {/* Figma Desktop Sidebar */}
       <Sidebar
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)}

@@ -3,30 +3,12 @@
 [![Next.js](https://img.shields.io/badge/Next.js-16.3-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?style=flat-square&logo=react)](https://react.dev/)
 [![Google Gemini](https://img.shields.io/badge/AI-Gemini%203.6%20Flash-4285F4?style=flat-square&logo=google)](https://aistudio.google.com/)
-[![Turborepo](https://img.shields.io/badge/Monorepo-Turborepo%20v2-EF4444?style=flat-square&logo=turborepo)](https://turbo.build/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS%20v4-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
 
 An intelligent examination evaluation platform that automates question paper extraction, handwritten student answer localization, spatial bounding box highlighting, and automated grading with AI feedback.
 
-Built as a high-performance **Turborepo monorepo** with a responsive, modern interface for both desktop and mobile devices.
-
----
-
-## 🏗️ Monorepo Architecture
-
-```
-crackit/
-├── apps/
-│   └── web/                 # Next.js 16 Web Application (App Router + Tailwind v4)
-│       ├── app/             # Application routes, pages, and components
-│       ├── public/          # Static assets & evaluation sample documents
-│       └── package.json     # App-specific dependencies
-├── packages/                # Reserved for shared libraries & utilities
-├── package.json             # Root workspace configuration (npm workspaces + Turborepo)
-├── turbo.json               # Turborepo build pipeline configuration
-└── README.md                # Project documentation
-```
+Built with a responsive, modern interface for both desktop and mobile devices.
 
 ---
 
@@ -44,9 +26,8 @@ crackit/
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Architecture
 
-- **Monorepo & Build System**: [Turborepo](https://turbo.build/) & npm workspaces
 - **Framework**: [Next.js 16 (App Router)](https://nextjs.org/) & React 19
 - **Styling**: Tailwind CSS v4 & Lucide Icons
 - **Vision & AI Engine**: [Google Gemini 3.6 Flash](https://aistudio.google.com/) (`gemini-3.6-flash`) with structured JSON schema mode
@@ -69,7 +50,7 @@ npm install
 ```
 
 ### 3. Configure Environment Variables
-Create a `.env.local` file inside `apps/web/`:
+Create a `.env.local` file in the root directory:
 ```bash
 # Get your free Gemini API key from https://aistudio.google.com/app/apikey
 GEMINI_API_KEY=your_gemini_api_key_here
@@ -79,7 +60,6 @@ GEMINI_MODEL=gemini-3.6-flash
 ```
 
 ### 4. Run Development Server
-From the root directory:
 ```bash
 npm run dev
 ```
@@ -104,14 +84,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 1. Push your code to your GitHub repository.
 2. Import the repository on [Vercel](https://vercel.com/).
-3. In **Settings → General**, set **Root Directory** to:
-   ```
-   apps/web
-   ```
-4. In **Settings → Environment Variables**, add:
+3. In **Settings → Environment Variables**, add:
    - `GEMINI_API_KEY`: `your_gemini_api_key`
    - `GEMINI_MODEL`: `gemini-3.6-flash`
-5. Click **Deploy**.
+4. Click **Deploy**.
 
 ---
 
